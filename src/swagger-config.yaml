@@ -1,0 +1,208 @@
+openapi: "3.0.0"
+info:
+  version: "0.0.1"
+  title: "Closer backend"
+  description: "Our ambitious project"
+servers:
+  - url: "http://localhost:3000"
+    description: "Default local environment"
+#components:
+  #securitySchemes:
+    ##See https://demo.identityserver.io/ for configuration details.
+    #identity_server_auth:
+      #type: oauth2
+      #flows:
+        #implicit:
+          #authorizationUrl: "https://demo.identityserver.io/connect/authorize"
+          #scopes:
+            #api: "api"
+security:
+  - identity_server_auth:
+    - api
+paths:
+  /auth/login:
+    post:
+      summary: Logs user into application
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCredentials'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                wrong credentials:
+                  value: {"status":"error","message":"Wrong username or password"}
+            text/plain:
+              examples:
+                login successful:
+                  description: User sesion token
+                  value: 2pgH65A742a4Raw45OVcOYsmea5LtpAjSNTtPWaLxxQ=
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message":"\"username\" is required"}
+
+  /auth/register:
+    post:
+      summary: Adds a new user
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCredentials'
+      responses:
+        '201':
+          # headers:
+          #   x-auth-token:
+          #     $ref: "#/components/headers/x-auth-token"
+          description: Created
+          content:
+            application/json:
+              examples:
+                user exists:
+                  value: {"status":"error","message":"User already created"}
+            text/plain:
+              examples:
+                registration successful:
+                  description: User sesion token
+                  value: 2pgH65A742a4Raw45OVcOYsmea5LtpAjSNTtPWaLxxQ=
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message":"\"username\" is required"}
+
+
+  /auth/logout:
+    put:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+
+      summary: Removes user session
+      tags:
+        - auth
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                logout successful:
+                  value: {"status":"ok"}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value: {"status":"error","message":"unauthorized"}
+
+  /user/profile:
+    get:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+
+      summary: Get user profile information
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ProfileInformation"
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value: {"status":"error","message":"unauthorized"}
+
+components:
+  schemas:
+    ProfileInformation:
+      type: object
+      properties:
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+      example:
+        username: johndoe
+        firstName: John
+        lastName: Doe
+        password: qwerty
+        email: john@maisl.com
+    LoginCredentials:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    RegisterCredentials:
+      type: object
+      required:
+        - username
+        - password
+        - firstName
+        - lastName
+        - email
+      properties:
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+      example:
+        username: johndoe
+        firstName: John
+        lastName: Doe
+        password: qwerty
+        email: john@maisl.com
+  headers:
+    x-auth-token:
+      description: User session token
+      schema:
+        type: string
+      example: 2pgH65A742a4Raw45OVcOYsmea5LtpAjSNTtPWaLxxQ=
