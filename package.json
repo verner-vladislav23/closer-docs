@@ -1,12 +1,11 @@
 {
-  "name": "swagger-ui-webpack-getting-started",
+  "name": "closer-backend-swagger",
   "version": "0.0.1",
-  "description": "A simple setup of Swagger UI with Webpack",
+  "description": "Docs for closer-backend",
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --open"
   },
-  "author": "Shaun Luttin",
   "license": "Apache-2.0",
   "devDependencies": {
     "clean-webpack-plugin": "^1.0.1",
