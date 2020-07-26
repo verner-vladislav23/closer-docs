@@ -170,8 +170,69 @@ paths:
                 unauthorized:
                   value: {"status":"error","message":"unauthorized"}
 
+  /user/update-location:
+    post:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLocationData'
+
+      summary: Update user location for matching
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                update successful:
+                  value: {"status":"ok"}
+                
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message":"\"location\" is required"}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value: {"status":"error","message":"unauthorized"}
+
 components:
   schemas:
+    Location:
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+    UpdateLocationData:
+      type: object
+      required:
+        - location
+      properties:
+        location:
+          $ref: "#/components/schemas/Location"
     NearUsersListItem:
       type: object
       properties:
