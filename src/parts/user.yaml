@@ -7,6 +7,12 @@ paths:
           required: true
           schema:
             $ref: "#/components/headers/x-auth-token"
+          
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
 
       summary: Get user profile information
       tags:
@@ -18,6 +24,14 @@ paths:
             application/json:
               schema: 
                 $ref: "#/components/schemas/ProfileInformation"
+
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message":"please provide username"}
 
         '401':
           description: Unauthorized
