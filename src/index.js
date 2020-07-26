@@ -6,9 +6,9 @@ const _ = require('lodash')
 const spec = require('./swagger-config.yaml');
 const auth = require('./parts/auth.yaml');
 const user = require('./parts/user.yaml');
-const commonDataTypes = require('./parts/common-data-types.yaml');
+const common = require('./parts/common/index.yaml');
 
-const fullSpec = _.merge({}, spec, auth, user, commonDataTypes)
+const fullSpec = _.merge({}, spec, auth, user, common)
 
 const ui = SwaggerUI({
   spec: fullSpec,

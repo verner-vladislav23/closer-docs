@@ -87,12 +87,7 @@ paths:
                 logout successful:
                   value: {"status":"ok"}
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              examples:
-                unauthorized:
-                  value: {"status":"error","message":"unauthorized"}
+          $ref: "#/components/responses/UnauthorizedResponse"
 
 
 components:

@@ -1,0 +1,23 @@
+components:
+  responses:
+    UnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          examples:
+            unauthorized:
+              description: User is not authenticated
+              value: {"status":"error","message":"unauthorized"}
+  schemas:
+    Location:
+      type: object
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

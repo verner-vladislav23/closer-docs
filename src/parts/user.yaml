@@ -34,12 +34,7 @@ paths:
                   value: {"status":"error","message":"please provide username"}
 
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              examples:
-                unauthorized:
-                  value: {"status":"error","message":"unauthorized"}
+          $ref: "#/components/responses/UnauthorizedResponse"
 
   /user/near-users:
     get:
@@ -62,12 +57,7 @@ paths:
                 $ref: "#/components/schemas/NearUsersList"
 
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              examples:
-                unauthorized:
-                  value: {"status":"error","message":"unauthorized"}
+          $ref: "#/components/responses/UnauthorizedResponse"
 
   /user/update-location:
     post:
@@ -103,12 +93,7 @@ paths:
                 validation error:
                   value: {"status":"error","message":"\"location\" is required"}
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              examples:
-                unauthorized:
-                  value: {"status":"error","message":"unauthorized"}
+          $ref: "#/components/responses/UnauthorizedResponse"
 
 components:
   schemas:
