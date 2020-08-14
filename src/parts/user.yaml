@@ -59,6 +59,114 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedResponse"
 
+  /user/change-password:
+    put:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordData'
+
+      summary: Change user password
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                update successful:
+                  value: {"status":"ok"}
+                
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message": "passwords do not match"}
+        '401':
+          $ref: "#/components/responses/UnauthorizedResponse"
+
+  /user/change-avatar:
+    put:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangeAvatarData'
+
+      summary: Change user avatar
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                update successful:
+                  value: {"status":"ok"}
+                
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message": "image is too large"}
+        '401':
+          $ref: "#/components/responses/UnauthorizedResponse"
+          
+  /user/update-profile:
+    put:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileData'
+
+      summary: Update user profile information
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                update successful:
+                  value: {"status":"ok"}
+                
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message": "\"email\" must be a valid email"}
+        '401':
+          $ref: "#/components/responses/UnauthorizedResponse"
+
   /user/update-location:
     post:
       parameters:
@@ -120,6 +228,20 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/NearUsersListItem"
+    UpdateProfileData:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+      example:
+        firstName: John
+        lastName: Doe
+        email: john@maisl.com
     ProfileInformation:
       type: object
       properties:
@@ -140,3 +262,19 @@ components:
         lastName: Doe
         password: qwerty
         email: john@maisl.com
+    ChangePasswordData:
+      type: object
+      properties:
+        newPassword:
+          type: string
+        oldPassword:
+          type: string
+      example:
+        oldPassword: grassfoxcrucialbottle
+        newPassword: sixhundredfriendsegg
+    ChangeAvatarData:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
