@@ -36,6 +36,41 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedResponse"
 
+    put:
+      parameters:
+        - in: header
+          name: x-auth-token
+          required: true
+          schema:
+            $ref: "#/components/headers/x-auth-token"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileData'
+
+      summary: Update user profile information
+      tags:
+        - user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                update successful:
+                  value: {"status":"ok"}
+                
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                validation error:
+                  value: {"status":"error","message": "\"email\" must be a valid email"}
+        '401':
+          $ref: "#/components/responses/UnauthorizedResponse"
+
   /user/near-users:
     get:
       parameters:
@@ -59,7 +94,7 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedResponse"
 
-  /user/change-password:
+  /user/password:
     put:
       parameters:
         - in: header
@@ -95,8 +130,9 @@ paths:
         '401':
           $ref: "#/components/responses/UnauthorizedResponse"
 
-  /user/change-avatar:
+  /user/avatar:
     put:
+      deprecated: true
       parameters:
         - in: header
           name: x-auth-token
@@ -130,45 +166,9 @@ paths:
                   value: {"status":"error","message": "image is too large"}
         '401':
           $ref: "#/components/responses/UnauthorizedResponse"
-          
-  /user/update-profile:
+
+  /user/location:
     put:
-      parameters:
-        - in: header
-          name: x-auth-token
-          required: true
-          schema:
-            $ref: "#/components/headers/x-auth-token"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProfileData'
-
-      summary: Update user profile information
-      tags:
-        - user
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              examples:
-                update successful:
-                  value: {"status":"ok"}
-                
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              examples:
-                validation error:
-                  value: {"status":"error","message": "\"email\" must be a valid email"}
-        '401':
-          $ref: "#/components/responses/UnauthorizedResponse"
-
-  /user/update-location:
-    post:
       parameters:
         - in: header
           name: x-auth-token
@@ -231,17 +231,23 @@ components:
     UpdateProfileData:
       type: object
       properties:
-        firstName:
+        avatar:
           type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-      example:
-        firstName: John
-        lastName: Doe
-        email: john@maisl.com
+          format: binary
+        profile:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+              format: email
+          example:
+            firstName: John
+            lastName: Doe
+            email: john@maisl.com
     ProfileInformation:
       type: object
       properties:
