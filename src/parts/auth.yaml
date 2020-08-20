@@ -66,7 +66,7 @@ paths:
 
 
   /auth/logout:
-    put:
+    post:
       description: Remove user session token from db. Client must clean x-auth-token on success.
       parameters:
         - in: header
