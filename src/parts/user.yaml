@@ -45,7 +45,7 @@ paths:
             $ref: "#/components/headers/x-auth-token"
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/UpdateProfileData'
 
@@ -132,7 +132,7 @@ paths:
 
   /user/avatar:
     put:
-      deprecated: true
+      deprecated: false
       parameters:
         - in: header
           name: x-auth-token
@@ -231,23 +231,17 @@ components:
     UpdateProfileData:
       type: object
       properties:
-        avatar:
+        firstName:
           type: string
-          format: binary
-        profile:
-          type: object
-          properties:
-            firstName:
-              type: string
-            lastName:
-              type: string
-            email:
-              type: string
-              format: email
-          example:
-            firstName: John
-            lastName: Doe
-            email: john@maisl.com
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+      example:
+        firstName: John
+        lastName: Doe
+        email: john@maisl.com
     ProfileInformation:
       type: object
       properties:
